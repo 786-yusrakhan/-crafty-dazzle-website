@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Crafty Dazzle — Admin</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<!-- Netlify Identity: powers the admin login -->
+<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+</head>
+<body>
+<!-- Decap CMS (the maintained fork of Netlify CMS) -->
+<script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+<script>
+  // Redirect the Identity confirmation link back to /admin/ so login works end-to-end.
+  if (window.netlifyIdentity) {
+    window.netlifyIdentity.on("init", (user) => {
+      if (!user) {
+        window.netlifyIdentity.on("login", () => {
+          document.location.href = "/admin/";
+        });
+      }
+    });
+  }
+</script>
+</body>
+</html>
+
+backend:
+  name: git-gateway
+  branch: main
+
+# Where uploaded/replaced images are stored, and the URL path the site uses to find them.
+media_folder: "images"
+public_folder: "/images"
+
+# Uses Netlify's own auth (Identity) — no extra login system to manage.
+site_url: https://your-site-name.netlify.app
+display_url: https://your-site-name.netlify.app
+logo_url: /images/haldi-mehndi-platter.png
+
+collections:
+  - name: "content"
+    label: "Website Content"
+    files:
+      - name: "general"
+        label: "Brand & Contact Info"
+        file: "content/site-content.json"
+        fields:
+          - { label: "Brand Name", name: "brand", widget: "string" }
+          - { label: "Tagline", name: "tagline", widget: "string" }
+          - { label: "WhatsApp Number (country code + number, no + or spaces)", name: "whatsapp", widget: "string" }
+          - { label: "Instagram Link", name: "instagram", widget: "string" }
+          - { label: "Instagram Reel Link (Rose Preservation)", name: "rosePreservationReel", widget: "string" }
+          - { label: "Top Announcement Bar Text", name: "topbar", widget: "string" }
+
+          - label: "Hero Section (top of homepage)"
+            name: "hero"
+            widget: "object"
+            fields:
+              - { label: "Small Label Above Heading", name: "eyebrow", widget: "string" }
+              - { label: "Main Heading", name: "heading", widget: "text", hint: "Line break = new line on the page" }
+              - { label: "Paragraph", name: "body", widget: "text" }
+              - { label: "'Shop' Button Text", name: "shopButton", widget: "string" }
+              - { label: "'Custom Gift' Button Text", name: "customButton", widget: "string" }
+              - { label: "Small Text Under Buttons", name: "micro", widget: "string" }
+              - { label: "Hero Image", name: "image", widget: "image" }
+              - { label: "Caption on Hero Image", name: "caption", widget: "string" }
+
+          - label: "About / Philosophy Section"
+            name: "about"
+            widget: "object"
+            fields:
+              - { label: "Small Label", name: "kicker", widget: "string" }
+              - { label: "Heading", name: "heading", widget: "string" }
+              - { label: "Paragraph", name: "body", widget: "text" }
+              - { label: "Image", name: "image", widget: "image" }
+              - { label: "Reel Link Text", name: "reelLinkText", widget: "string" }
+
+          - label: "Custom Orders Section"
+            name: "custom"
+            widget: "object"
+            fields:
+              - { label: "Heading", name: "heading", widget: "text" }
+              - { label: "Paragraph", name: "body", widget: "text" }
+              - { label: "Button Text", name: "button", widget: "string" }
+
+          - label: "Contact Section"
+            name: "contact"
+            widget: "object"
+            fields:
+              - { label: "Heading", name: "heading", widget: "string" }
+              - { label: "Paragraph", name: "body", widget: "text" }
+              - { label: "Button Text", name: "button", widget: "string" }
+              - { label: "Phone Number Shown", name: "phoneDisplay", widget: "string" }
+              - { label: "Instagram Handle Shown", name: "instagramHandle", widget: "string" }
+
+          - label: "Footer"
+            name: "footer"
+            widget: "object"
+            fields:
+              - { label: "Small Note", name: "note", widget: "string" }
+              - { label: "Copyright Line", name: "copyright", widget: "string" }
+
+      - name: "products"
+        label: "Products (Shop Grid)"
+        file: "content/site-content.json"
+        fields:
+          - label: "Products"
+            name: "products"
+            widget: "list"
+            summary: "{{fields.name}} — {{fields.category}}"
+            fields:
+              - { label: "Product Name", name: "name", widget: "string" }
+              - { label: "Category", name: "category", widget: "string" }
+              - { label: "Short Description", name: "description", widget: "text" }
+              - { label: "Photo", name: "image", widget: "image" }
+
+      - name: "collections"
+        label: "Shop by Mood (Collections)"
+        file: "content/site-content.json"
+        fields:
+          - label: "Collections"
+            name: "collections"
+            widget: "list"
+            summary: "{{fields.label}}"
+            fields:
+              - { label: "Title", name: "label", widget: "string" }
+              - { label: "Description", name: "description", widget: "text" }
+              - { label: "Photo", name: "image", widget: "image" }
+
+      - name: "gallery"
+        label: "Instagram Moments Gallery"
+        file: "content/site-content.json"
+        fields:
+          - label: "Section Label"
+            name: "gallery"
+            widget: "object"
+            fields:
+              - { label: "Small Label", name: "kicker", widget: "string" }
+              - { label: "Heading", name: "heading", widget: "string" }
+              - { label: "Paragraph", name: "body", widget: "text" }
+              - label: "Photos"
+                name: "images"
+                widget: "list"
+                summary: "{{fields.caption}}"
+                fields:
+                  - { label: "Photo", name: "image", widget: "image" }
+                  - { label: "Caption", name: "caption", widget: "string" }
+
+      - name: "services"
+        label: "What We Create (Services List)"
+        file: "content/site-content.json"
+        fields:
+          - label: "Services"
+            name: "services"
+            widget: "list"
+            summary: "{{fields.title}}"
+            fields:
+              - { label: "Number (e.g. 01)", name: "number", widget: "string" }
+              - { label: "Title", name: "title", widget: "string" }
+              - { label: "Description", name: "description", widget: "text" }
